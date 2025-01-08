@@ -1,3 +1,20 @@
+<?php
+$servername = "6yeng.h.filess.io";
+$username = "pwbuas_sittinghad";
+$password = "29847d917f0fd5ad1f03d303af4370754c55bcb6";
+$dbname = "pwbuas_sittinghad";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
+$sql = "SELECT * FROM team";
+$result = $conn->query($sql);
+$jumlah_anggota = mysqli_num_rows($result);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,11 +92,19 @@ class="navbar-satu">2023B <span>KELOMPOK 7</span></a>
     </p>
 
     <div class="row">
-            <div class="team-card" data-aos="zoom-in" data-aos-duration="500" data-aos-delay="100"> <!--Membuat sebuah class navbar-->
-                    <img src="gambar/" alt="" class="team-card-img">
-                    <h3 class="team-card-title"></h3>
-                    <p class="team-card-nim"></p>
-            </div>
+            <?php
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo '<div class="team-card" data-aos="zoom-in" data-aos-duration="500" data-aos-delay="100"> <!--Membuat sebuah class navbar-->';
+                    echo '<img src="gambar/' . $row["gambar"] . '" alt="' . $row["nama"] . '" class="team-card-img">';
+                    echo '<h3 class="team-card-title">' . $row["nama"] . '</h3>';
+                    echo '<p class="team-card-nim">' . $row["nim"] . '</p>';
+                    echo '</div>';
+                }
+            } else {
+                echo "<p>Belum ada anggota.</p>";
+            }
+            ?>
     </div>
 </section>
 <!-- Kontak kami -->
@@ -122,6 +147,21 @@ class="navbar-satu">2023B <span>KELOMPOK 7</span></a>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
     AOS.init();
+    </script>
+
+    <script>
+    function sendemail() {
+        var firstName = document.getElementById('fname').value;
+        var lastName = document.getElementById('Lname').value;
+        var body = document.getElementById('body').value;
+        var email = 'metaslide23@gmail.com'; /* isi email */
+
+        var fullName = firstName + " " + lastName;
+        
+        var mailtolink = 'mailto:' + email + '?subject=' + encodeURIComponent(fullName) + '&body=' + encodeURIComponent(body);
+
+        window.location.href = mailtolink;
+    }
     </script>
 </body>
 </html>
